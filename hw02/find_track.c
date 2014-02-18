@@ -8,6 +8,7 @@ License: Creative Commons Attribution-ShareAlike 3.0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <regex.h>
 
 #define NUM_TRACKS 5
 
@@ -27,18 +28,33 @@ void find_track(char search_for[])
 {
     int i;
     for (i=0; i<NUM_TRACKS; i++) {
-	if (strstr(tracks[i], search_for)) {
-	    printf("Track %i: '%s'\n", i, tracks[i]);
-	}
+	   if (strstr(tracks[i], search_for)) {
+	      printf("Track %i: '%s'\n", i, tracks[i]);
+	   }
     }
 }
 
 // Finds all tracks that match the given pattern.
 //
 // Prints track number and title.
-void find_track_regex(char pattern[])
+int find_track_regex(char pattern[])
 {
-    // TODO: fill this in
+    regex_t re;
+
+
+    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) {
+        return(0);      /* Report error. */
+    }
+    int l;
+    for (l=0; l<NUM_TRACKS; l++) {
+        if (regexec(&re, tracks[l], (size_t) 0, NULL, 0) == 0){
+            printf("RegEx match: Track %i: '%s'\n", l, tracks[l]);
+        }
+    }
+    
+    regfree(&re);
+
+    return(1);
 }
 
 // Truncates the string at the first newline, if there is one.
@@ -60,7 +76,7 @@ int main (int argc, char *argv[])
     rstrip(search_for);
 
     find_track(search_for);
-    //find_track_regex(search_for);
+    find_track_regex(search_for);
 
     return 0;
 }
