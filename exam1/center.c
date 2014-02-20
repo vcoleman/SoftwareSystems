@@ -18,8 +18,25 @@ License: Creative Commons Attribution-ShareAlike 3.0
 
 char *center(char *s, int n, char fillchar)
 {
-    // FILL THIS IN
-    //    return NULL;
+    if (n >= strlen(s)){}
+        char *joinedStr;
+        joinedStr = (char *)malloc(n);
+        
+        int i;
+        char firstFill;
+        firstFill = (int)((n - strlen(s)) /2 );
+        for (i = 0; i < firstFill; i++){
+            strcat(joinedStr, fillchar[0]);
+        }
+        for (i = 0; i <=strlen(s); i ++){
+            strcat(joinedStr, s[i]);
+        }
+        for (i = strlen(joinedStr); i < n; i++){
+            strcat(joinedStr, fillchar[0]);
+        }
+        return joinedStr;
+    } 
+return s
 }
 
 
