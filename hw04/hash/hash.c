@@ -5,6 +5,7 @@ License: Creative Commons Attribution-ShareAlike 3.0
 
 */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -134,7 +135,14 @@ int hash_hashable(Hashable *hashable)
 int equal_int (void *ip, void *jp)
 {
     // FIX ME!
-    return 0;
+    
+    if ((int *)ip == (int *)jp){
+        return 1;
+    }
+    else {
+        return 0;
+    }
+
 }
 
 
@@ -142,7 +150,13 @@ int equal_int (void *ip, void *jp)
 int equal_string (void *s1, void *s2)
 {
     // FIX ME!
-    return 0;
+
+    if (strcmp((char *)s1, (char *)s2)){
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 
@@ -150,7 +164,17 @@ int equal_string (void *s1, void *s2)
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
     // FIX ME!
-    return 0;
+    Hashable *hash1 = (Hashable *)h1;
+    Hashable *hash2 = (Hashable *)h2;
+    int flag = 0;
+
+    if (hash1->key == hash2->key && hash1->hash == hash2->hash 
+                               && hash1->equal == hash2->equal){
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 
@@ -190,7 +214,12 @@ typedef struct node {
 Node *make_node(Hashable *key, Value *value, Node *next)
 {
     // FIX ME!
-    return NULL;
+
+    Node *node = (Node *) malloc (sizeof (Node));
+    node->key = key;
+    node->value = value;
+    node->next = next;
+    return node;
 }
 
 
@@ -206,7 +235,15 @@ void print_node(Node *node)
 /* Prints all the Nodes in a list. */
 void print_list(Node *node)
 {
-    // FIX ME!
+    Node *nodeNext = (Node *) malloc(sizeof (Node));
+    nodeNext = node;
+
+    while(nodeNext->next != NULL){
+        print_node(node);
+        nodeNext = nodeNext->next;
+    }
+
+    free(nodeNext);
 }
 
 
@@ -224,6 +261,20 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 Value *list_lookup(Node *list, Hashable *key)
 {
     // FIX ME!
+    Node *nodeNext = (Node *) malloc(sizeof (Node));
+    nodeNext = list;
+
+
+    while(nodeNext->next != NULL){
+        printf("looking thouth list for key");
+        if (equal_hashable(nodeNext->key, key)){
+            Value *keyValue = nodeNext->value;
+            free(nodeNext);
+            return keyValue;
+        }
+        nodeNext = nodeNext->next;
+    }
+    free(nodeNext);
     return NULL;
 }
 
@@ -240,7 +291,16 @@ typedef struct map {
 Map *make_map(int n)
 {
     // FIX ME!
-    return NULL;
+
+    Map *map = (Map *) malloc( sizeof(Map));
+    Node **lists = (Node *) malloc(sizeof(Node) * n);
+    /*int i;
+    for(i = 0; i < n; i++){
+        lists[n] = (Node *) malloc(sizeof(Node));
+    }
+    */
+    //smap->lists = lists;
+    return map;
 }
 
 
