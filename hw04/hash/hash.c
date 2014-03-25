@@ -317,7 +317,7 @@ void map_add(Map *map, Hashable *key, Value *value)
 {
     // FIX ME!
 
-    int index = abs(key->hash(key)) % 10;
+    int index = abs(key->hash(key)) % map->n;
 
     printf("hash key %i ", (key->hash(key)));
     printf("index = %i ", index);
@@ -356,7 +356,7 @@ Value *map_lookup(Map *map, Hashable *key)
 {
     // FIX ME!
 
-    int index = abs(key->hash(key)) % 10;
+    int index = abs(key->hash(key)) % map->n;
 
     printf("map_lookup index: %i   ", index);
 
