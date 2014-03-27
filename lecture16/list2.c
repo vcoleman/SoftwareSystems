@@ -7,7 +7,6 @@ License: Creative Commons Attribution-ShareAlike 3.0
 
 */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -107,8 +106,39 @@ void reverse(Node **head) {
 // element between the first and second elements.
 // Returns 0 if successful, -1 if the index is out of range.
 int insert_by_index(Node **head, int val, int index) {
-    // FILL THIS IN
+    Node *node = *head;
+    Node *newNode = make_node(val, *head);
+    newNode->val = val;
+    Node *prevNode = NULL;
+    Node *nextNode = NULL;
+    int indexCurrent = 0;
+
+    if (node == NULL) {
     return -1;
+    }
+
+    if(index = 0){
+        newNode->next = node;
+        *head = newNode;
+        return 0;
+    }
+
+    for(indexCurrent = 0; indexCurrent < index; indexCurrent++) {
+        if(indexCurrent = index){
+            prevNode = node;
+            nextNode = node->next;
+            break;
+        }
+        node = node->next;
+    }
+
+    if(prevNode == NULL){
+        return -1;
+    }
+
+    newNode->next = nextNode;
+    prevNode->next = newNode;
+    return 0;
 }
 
 // Makes a mysterious data structure.
