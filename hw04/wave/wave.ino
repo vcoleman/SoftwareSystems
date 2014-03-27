@@ -75,6 +75,7 @@ void loop() {
   // if either button is pressed, turn on the LED
   if (button1 ^ button2) {
       digitalWrite(ledPin, HIGH);  
+      Serial.println(button1)
   } else {          
       digitalWrite(ledPin, LOW);
   }
