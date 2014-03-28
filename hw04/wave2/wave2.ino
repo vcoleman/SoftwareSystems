@@ -55,15 +55,6 @@ void setup() {
   
 }
 
-void writeByte(int x) {
-  int pin;
-  
-  for (pin=13; pin>=6; pin--) {
-    digitalWrite(pin, x&1);
-    x >>= 1;
-  }
-}
-
 //I found this fn online because I don't like re-inventing the wheel
 unsigned int reverseBits(unsigned int num)
 {
@@ -78,11 +69,11 @@ unsigned int reverseBits(unsigned int num)
     return reverse_num;
 }
 
-  //delayMicroseconds(100);
-ISR(TIMER2_COMPA_vect){//timer1 interrupt 8kHz toggles pin 9
+//timer1 interrupt 8kHz
+ISR(TIMER2_COMPA_vect){
 //generates pulse wave of frequency 8kHz/2 = 4kHz (takes two cycles for full wave- toggle high then toggle low)
-  if (toggle1){
-    if(digitalRead(buttonPin1)){
+  if (toggle1){ //to cut frequency in half
+    if(digitalRead(buttonPin1)){ //to cut frequency in half again if butten is pressed
       if(toggleButton){
         toggleButton = 0;
          counter += stride;
@@ -104,12 +95,16 @@ ISR(TIMER2_COMPA_vect){//timer1 interrupt 8kHz toggles pin 9
   }
 }
 
+// write desired value to ports to control the speaker
 void writeByteBitwise(int x){
   int pin; 
   int xRev;
   
+  // reverse the bits because pins wired to speaker in opposite order
   xRev = reverseBits(x);
-  PORTD = xRev>>2 | B00000100;
+  
+  // shift values to write to ports 13-6
+  PORTD = xRev>>2 | B00000100;  // 'or' to make sure button input remains active
   PORTB = xRev<<6;
   
 }
@@ -117,6 +112,8 @@ void writeByteBitwise(int x){
 
 
 void loop() {
+
+  // COMENTED OUT SO INTERRUPT DOMINATES
   //int button1 = digitalRead(buttonPin1);
   //if (button1) return;
 
