@@ -146,13 +146,58 @@ double *row_sum(Matrix *A) {
     double *res = malloc(A->rows * sizeof(double));
 
     for (i=0; i<A->rows; i++) {
-	total = 0.0;
+	   total = 0.0;
 	for (j=0; j<A->cols; j++) {
 	    total += A->data[i][j];
 	}
 	res[i] = total;
     }
     return res;
+}
+
+
+double *col_sum(Matrix *A) {
+    double total;
+    int i, j;
+
+    double *res = malloc(A->rows * sizeof(double));
+
+    for (i=0; i<A->cols; i++) {
+       total = 0.0;
+    for (j=0; j<A->rows; j++) {
+        total += A->data[i][j];
+    }
+    res[i] = total;
+    }
+    return res;
+}
+
+
+//Returns the summ of the forward diagonal elements of input matrix
+//Matrix *A must be a square matrix
+double f_diag_sum(Matrix *A) {
+    double total = 0.0;
+    int i;
+
+    for (i=0; i<A->cols; i++) {
+        total += A->data[i][i];
+    }
+
+    return total;
+}
+
+
+//Returns the summ of the backward diagonal elements of input matrix
+//Matrix *A must be a square matrix
+double b_diag_sum(Matrix *A) {
+    double total = 0.0;
+    int i;
+
+    for (i=0; i<A->cols; i++) {
+        total += A->data[i][(A->cols - i)];
+    }
+
+    return total;
 }
 
 /* 
@@ -168,6 +213,31 @@ double *row_sum(Matrix *A) {
 
    Feel free to use row_sum().
 */
+
+int is_magic_square(Matrix *A){
+
+    //checks to see if square matrix
+    if(A->cols != A->rows){
+        return 0;
+    }
+
+    double *row_add = row_sum(A);
+    double *col_add = col_sum(A);
+    double f_diag_add = b_diag_sum(A);
+    double b_diag_add = f_diag_sum(A);
+
+    int i,j;
+
+    for(i=0; i<A->cols; i++){
+        //sees if all rows, columns and diagonals are equal to eachother
+        if (row_add[i] == col_add[i] == *row_add == *col_add){}
+        else{
+            return 0;
+        }
+    }
+    return 1;
+}
+
 
 
 int main() {
@@ -202,6 +272,22 @@ int main() {
 	printf("row %d\t%lf\n", i, sums[i]);
     }
     // should print 6, 22, 38
+
+    Matrix *E = make_matrix(3, 3);
+
+    int magic_square = is_magic_square(E);
+
+    printf("Is E magic square?: %d \n", magic_square);
+
+
+    Matrix *F = make_matrix(4, 3);
+
+    int magic_square2 = is_magic_square(F);
+
+    printf("Is E magic square?: %d \n", magic_square2);
+
+    // should print 1,0
+
 
     return 0;
 }
